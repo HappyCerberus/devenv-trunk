@@ -48,7 +48,7 @@ jobs:
           platforms: linux/amd64, linux/arm64
           push: true
           tags: |
-            happycerberus/devenv-gcc-trunk:latest
-            happycerberus/devenv-gcc-trunk:${{ steps.previoustag.outputs.tag }}
-            ghcr.io/happycerberus/devenv-gcc-trunk:latest
-            ghcr.io/happycerberus/devenv-gcc-trunk:${{ steps.previoustag.outputs.tag }}
+            happycerberus/devenv-trunk:latest
+            happycerberus/devenv-trunk:${{ steps.previoustag.outputs.tag }}
+            ghcr.io/happycerberus/devenv-trunk:latest
+            ghcr.io/happycerberus/devenv-trunk:${{ steps.previoustag.outputs.tag }}
