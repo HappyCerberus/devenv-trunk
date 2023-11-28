@@ -107,3 +107,8 @@ RUN set -ex &&\
 RUN set -ex &&\
     apt-get update &&\
     ./llvm.sh 17 all
+
+# Ninja build (required for C++20 modules with CMake)
+RUN set -ex &&\
+    apt-get update &&\
+    apt-get install ninja-build
