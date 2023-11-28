@@ -1,6 +1,7 @@
 FROM buildpack-deps:bookworm
 ENV GCC_VERSION 14.0.0
 ARG TARGETARCH
+ENV GCC_GIT=26a7e775a20aeea7eff620e03cd5504c4eb9d48e
 
 # Building GCC from sources
 RUN set -ex; \
@@ -8,10 +9,10 @@ RUN set -ex; \
     apt-get update; \
     apt-get install -y --no-install-recommends dpkg-dev flex gnupg; \
     rm -r /var/lib/apt/lists/*; \
-    curl -fL https://github.com/gcc-mirror/gcc/archive/refs/heads/master.zip -o gcc.zip; \
+    curl -fL https://github.com/gcc-mirror/gcc/archive/$GCC_GIT.zip -o gcc.zip; \
     mkdir -p /usr/src; \
     unzip gcc.zip -d /usr/src; \
-    mv /usr/src/gcc-master /usr/src/gcc; \
+    mv /usr/src/gcc-$GCC_GIT /usr/src/gcc; \
     rm gcc.zip; \
     cd /usr/src/gcc; \
     ./contrib/download_prerequisites; \
