@@ -76,12 +76,20 @@ RUN set -ex; \
     ./bootstrap && make && make install; \
     rm -rf /usr/src/cmake-master
 
-# GDB
+# Ninja build (required for C++20 modules with CMake)
+RUN set -ex &&\
+    apt-get update &&\
+    apt-get install -y ninja-build
+
+
 ENV CC=/usr/local/bin/gcc
-RUN curl -fL https://ftp.gnu.org/gnu/gdb/gdb-13.2.tar.gz -o gdb-13.2.tar.gz && \
+RUN set -ex &&\
+    apt-get update &&\
+    apt-get install -y python3-dev &&\
+    curl -fL https://ftp.gnu.org/gnu/gdb/gdb-13.2.tar.gz -o gdb-13.2.tar.gz && \
 	tar -xf gdb-13.2.tar.gz -C /tmp && rm gdb-13.2.tar.gz && \
 	cd /tmp/gdb-13.2 && \
-	./configure --prefix=/usr/local && make && make install && \
+	./configure --prefix=/usr/local --enable-tui --with-python && make && make install && \
 	rm -rf /tmp/gdb-13.2
 
 # Go (required for bazel)
@@ -109,7 +117,6 @@ RUN set -ex &&\
     apt-get update &&\
     ./llvm.sh 17 all
 
-# Ninja build (required for C++20 modules with CMake)
-RUN set -ex &&\
-    apt-get update &&\
-    apt-get install ninja-build
+# Make GDB avoid security checks and autoload the python pretty-printing
+RUN mkdir -p /root/.config/gdb &&\
+    echo "set auto-load safe-path /" >/root/.config/gdb/gdbinit
