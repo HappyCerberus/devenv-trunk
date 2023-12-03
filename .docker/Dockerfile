@@ -1,7 +1,7 @@
 FROM buildpack-deps:bookworm
 ENV GCC_VERSION 14.0.0
 ARG TARGETARCH
-ENV GCC_GIT=26a7e775a20aeea7eff620e03cd5504c4eb9d48e
+ENV GCC_GIT=04d4a4943a445e2c83f20cebc95b6c2aac3305e6
 
 # Building GCC from sources
 RUN set -ex; \

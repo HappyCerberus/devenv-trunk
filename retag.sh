@@ -1,4 +1,4 @@
-TAG=20231128
+TAG=20231203
 
 docker manifest create happycerberus/devenv-trunk:latest --amend happycerberus/devenv-trunk:latest-arm64 --amend happycerberus/devenv-trunk:latest-amd64
 docker manifest annotate happycerberus/devenv-trunk:latest happycerberus/devenv-trunk:latest-amd64 --arch amd64
