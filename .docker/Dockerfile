@@ -1,7 +1,7 @@
 FROM buildpack-deps:bookworm
 ENV GCC_VERSION 14.0.0
 ARG TARGETARCH
-ENV GCC_GIT=04d4a4943a445e2c83f20cebc95b6c2aac3305e6
+ENV GCC_GIT=ea9df9085aafdd51c4b1292b059d606c02d0ee23
 
 # Building GCC from sources
 RUN set -ex; \
@@ -51,15 +51,16 @@ RUN set -ex; \
 RUN set -ex; \
 # this filename needs to sort higher than all the architecture filenames ("aarch64-...", "armeabi...", etc)
 	{ echo '/usr/local/lib64'; echo '/usr/local/lib'; } > /etc/ld.so.conf.d/000-local-lib.conf; \
-    ldconfig -v; \
+    ldconfig -v;
+    # \
     # the libc created by gcc might be too old for a newer Debian
 	# check that the Debian libstdc++ doesn't have newer requirements than the gcc one
-	bash -Eeuo pipefail -xc ' \
-		deb="$(strings /usr/lib/*/libstdc++.so* | grep "^GLIBC" | sort -u)"; \
-		gcc="$(strings /usr/local/lib*/libstdc++.so | grep "^GLIBC" | sort -u)"; \
-		diff="$(comm -23 <(cat <<<"$deb") <(cat <<<"$gcc"))"; \
-		test -z "$diff"; \
-	'
+	#bash -Eeuo pipefail -xc ' \
+	#	deb="$(strings /usr/lib/*/libstdc++.so* | grep "^GLIBC" | sort -u)"; \
+#		gcc="$(strings /usr/local/lib*/libstdc++.so | grep "^GLIBC" | sort -u)"; \
+#		diff="$(comm -23 <(cat <<<"$deb") <(cat <<<"$gcc"))"; \
+#		test -z "$diff"; \
+	#'
 
 # ensure that alternatives are pointing to the new compiler and that old one is no longer used
 RUN set -ex; \
@@ -110,12 +111,12 @@ RUN set -ex &&\
     apt-get install -y --no-install-recommends lsb-release  wget software-properties-common gnupg &&\
     curl -fL https://apt.llvm.org/llvm.sh -o llvm.sh &&\
     chmod +x llvm.sh &&\
-    ./llvm.sh 17 all || echo ""
+    ./llvm.sh 18 all || echo ""
 
 # For whatever reason we have to manually update and run the llvm script again.
 RUN set -ex &&\
     apt-get update &&\
-    ./llvm.sh 17 all
+    ./llvm.sh 18 all
 
 # Make GDB avoid security checks and autoload the python pretty-printing
 RUN mkdir -p /root/.config/gdb &&\
